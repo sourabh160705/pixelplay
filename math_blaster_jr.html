@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Blaster Jr.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .font-game {
+            font-family: 'Press Start 2P', cursive;
+        }
+        .game-container {
+            background-color: #2d3748;
+            border: 2px solid #4a5568;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        .input-field {
+            background-color: #1a202c;
+            border: 2px solid #4a5568;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #9f7aea;
+            box-shadow: 0 0 15px rgba(159, 122, 234, 0.5);
+        }
+        .submit-button {
+            background: linear-gradient(135deg, #4299e1 0%, #9f7aea 100%);
+            transition: all 0.3s ease;
+        }
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        .feedback {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-900/80 backdrop-blur-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-game text-white">
+                Math Blaster
+            </div>
+            <div>
+                 <a href="./game_dashboard.html" class="text-purple-400 hover:text-purple-300 transition-colors">&larr; Back to Dashboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Game Content -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="game-container w-full max-w-lg p-8 rounded-lg text-center">
+            <div class="flex justify-around items-center mb-4">
+                <h1 class="text-3xl font-bold">Score: <span id="score" class="font-game text-green-400">0</span></h1>
+                <h2 class="text-3xl font-bold">Level: <span id="level" class="font-game text-purple-400">1</span></h2>
+            </div>
+            <p class="text-gray-400 mb-8">Solve the math problem to fuel your spaceship!</p>
+            
+            <div id="problem-container" class="my-10">
+                <p class="text-5xl font-bold font-game tracking-widest" id="problem">5 + 3</p>
+            </div>
+
+            <form id="answer-form">
+                <input type="number" id="answer-input" class="input-field w-full text-center text-3xl p-4 rounded-lg" placeholder="?" autofocus>
+                <button type="submit" class="submit-button w-full mt-6 py-4 rounded-lg text-white font-bold text-xl">Submit Answer</button>
+            </form>
+
+            <div id="feedback-container" class="mt-6 h-8">
+                <p id="feedback" class="text-2xl font-bold opacity-0">&nbsp;</p>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const problemEl = document.getElementById('problem');
+        const answerForm = document.getElementById('answer-form');
+        const answerInput = document.getElementById('answer-input');
+        const scoreEl = document.getElementById('score');
+        const feedbackEl = document.getElementById('feedback');
+        const levelEl = document.getElementById('level');
+        
+        let score = 0;
+        let currentAnswer;
+
+        function updateLevel() {
+            let level = 1;
+            if (score >= 15) {
+                level = 4;
+            } else if (score >= 10) {
+                level = 3;
+            } else if (score >= 5) {
+                level = 2;
+            }
+            levelEl.textContent = level;
+            return level;
+        }
+
+        function generateProblem() {
+            const level = updateLevel();
+            let maxNum = 10;
+            let maxMulti = 5;
+
+            // Adjust difficulty based on level
+            if (level === 2) {
+                maxNum = 25;
+                maxMulti = 10;
+            } else if (level === 3) {
+                maxNum = 50;
+                maxMulti = 12;
+            } else if (level === 4) {
+                maxNum = 100;
+                maxMulti = 15;
+            }
+
+            let num1 = Math.floor(Math.random() * maxNum) + 1;
+            let num2 = Math.floor(Math.random() * maxNum) + 1;
+            const operators = ['+', '-', '*', '/'];
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+
+            // To avoid negative numbers for subtraction, always subtract the smaller number from the larger one.
+            if (operator === '-' && num1 < num2) {
+                // Swap the numbers
+                [num1, num2] = [num2, num1];
+            }
+            
+            let problemText;
+
+            switch (operator) {
+                case '+':
+                    currentAnswer = num1 + num2;
+                    problemText = `${num1} + ${num2}`;
+                    break;
+                case '-':
+                    currentAnswer = num1 - num2;
+                    problemText = `${num1} - ${num2}`;
+                    break;
+                case '*':
+                    // Let's keep multiplication numbers smaller to start
+                    const multiNum1 = Math.floor(Math.random() * maxMulti) + 2;
+                    const multiNum2 = Math.floor(Math.random() * maxMulti) + 2;
+                    currentAnswer = multiNum1 * multiNum2;
+                    problemText = `${multiNum1} x ${multiNum2}`;
+                    break;
+                case '/':
+                    // Ensure division results in a whole number
+                    const divAnswer = Math.floor(Math.random() * maxMulti) + 2;
+                    const divNum2 = Math.floor(Math.random() * maxMulti) + 2;
+                    const divNum1 = divAnswer * divNum2;
+                    currentAnswer = divAnswer;
+                    problemText = `${divNum1} ÷ ${divNum2}`;
+                    break;
+            }
+            
+            problemEl.textContent = problemText;
+        }
+
+        function showFeedback(message, color) {
+            feedbackEl.textContent = message;
+            feedbackEl.style.color = color;
+            feedbackEl.style.opacity = 1;
+
+            setTimeout(() => {
+                feedbackEl.style.opacity = 0;
+            }, 1500);
+        }
+
+        answerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const userAnswer = parseInt(answerInput.value, 10);
+
+            if (isNaN(userAnswer)) {
+                return; // Do nothing if input is not a number
+            }
+
+            if (userAnswer === currentAnswer) {
+                score++;
+                scoreEl.textContent = score;
+                showFeedback('Correct!', '#4ade80'); // Green
+                answerInput.value = '';
+                generateProblem();
+            } else {
+                showFeedback('Try Again!', '#f87171'); // Red
+                answerInput.value = '';
+            }
+            
+            answerInput.focus();
+        });
+
+        // Initial problem
+        generateProblem();
+    </script>
+</body>
+</html>
+
+
+

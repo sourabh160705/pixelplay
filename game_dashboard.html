@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelPlay Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .font-game {
+            font-family: 'Press Start 2P', cursive;
+        }
+        .game-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #4a5568;
+        }
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            border-color: #9f7aea;
+        }
+        .welcome-banner {
+            background: linear-gradient(to right, rgba(66, 153, 225, 0.1), rgba(159, 122, 234, 0.1));
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-purple-900/20">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-game text-white">
+                PixelPlay
+            </div>
+            <div>
+                 <a href="./game_landing_page.html" class="text-purple-400 hover:text-purple-300 transition-colors">Log Out</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner border border-purple-800 rounded-lg p-8 mb-12 text-center">
+             <h1 class="text-3xl md:text-4xl font-bold">Welcome, <span id="playerName" class="font-game text-purple-400">Player</span>!</h1>
+             <p class="mt-4 text-lg text-gray-400">Your adventure starts now. Choose a game below to begin.</p>
+        </div>
+
+        <!-- Games for Ages 5-15 -->
+        <section id="games-5-15" class="py-10">
+            <div class="text-left mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold font-game">Fun for Young Players</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                 <!-- Re-using game cards from landing page -->
+                 <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/7c3aed/ffffff?text=Math+Blaster" alt="Math Blaster Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Math Blaster Jr.</h3>
+                        <p class="text-gray-400">Solve math problems to fuel your spaceship!</p>
+                        <a href="./math_blaster_jr.html">
+                        <button class="mt-4 submit-button bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg w-full">Play Now</button></a>
+                    </div>
+                </div>
+                <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/2563eb/ffffff?text=Block+Builders" alt="Block Builders Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Block Builders</h3>
+                        <p class="text-gray-400">A creative sandbox for building amazing worlds.</p>
+                        <a href="./block_builders.html">
+                        <button class="mt-4 submit-button bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg w-full">Play Now</button></a> 
+                    </div>
+                </div>
+                <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/db2777/ffffff?text=Fruit+cuting" alt="Fruit cuting Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Fruit cuting </h3>
+                        <p class="text-gray-400">A fast and fun arcade game of cuting fruit.</p>
+                        <a href="./fruit_catch.html">
+                        <button class="mt-4 submit-button bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg w-full">Play Now</button></a>
+                    </div>
+                </div>
+                 <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/16a34a/ffffff?text=Word+Wizards" alt="Word Wizards Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Word Wizards</h3>
+                        <p class="text-gray-400">Create words to cast spells and defeat monsters.</p>
+                        <a href="./word_wizards.html">
+                        <button class="mt-4 submit-button bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg w-full">Play Now</button></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games for Ages 15-25+ -->
+        <section id="games-15-25" class="py-10">
+            <div class="text-left mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold font-game">Challenge & Strategy</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Re-using game cards from landing page -->
+                <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/be123c/ffffff?text=Pixel+Siege" alt="Pixel Siege Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Pixel Siege</h3>
+                        <p class="text-gray-400">A retro tower-defense game of epic proportions.</p>
+                    </div>
+                </div>
+                <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/c2410c/ffffff?text=Code+Breaker" alt="Code Breaker Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Code Breaker</h3>
+                        <p class="text-gray-400">A race against time to solve complex logic puzzles.</p>
+                    </div>
+                </div>
+                <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/4d7c0f/ffffff?text=The+Labyrinth" alt="Obsidian Labyrinth Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">The Obsidian Labyrinth</h3>
+                        <p class="text-gray-400">A modern text-based RPG with deep choices.</p>
+                    </div>
+                </div>
+                <div class="game-card bg-gray-800 rounded-lg overflow-hidden">
+                    <img src="https://placehold.co/600x400/0891b2/ffffff?text=Astro+Jump" alt="Astro Jump Game" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Astro Jump</h3>
+                        <p class="text-gray-400">An endless jumper that tests your reflexes in space.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        // Get player name from localStorage and display it
+        document.addEventListener('DOMContentLoaded', () => {
+            const playerName = localStorage.getItem('pixelPlayUsername');
+            if (playerName) {
+                document.getElementById('playerName').textContent = playerName;
+            }
+        });
+    </script>
+
+</body>
+</html>

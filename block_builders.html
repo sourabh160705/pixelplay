@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Builders - PixelPlay Arcade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        .color-box.selected, .color-picker-wrapper.selected {
+            border-color: #f7fafc; /* White border for selected */
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        .color-picker-wrapper {
+            border: 3px solid transparent;
+            padding: 5px;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 40px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border-radius: 5px;
+            border: 1px solid #9ca3af;
+        }
+        input[type="color"]::-moz-color-swatch {
+            border-radius: 5px;
+            border: 1px solid #9ca3af;
+        }
+        .btn-arcade {
+            background-color: #4a5568;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border-bottom: 4px solid #2d3748;
+        }
+        .btn-arcade:hover {
+            background-color: #718096;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="text-center p-4 border-b-4 border-gray-700">
+        <h1 class="text-4xl font-game text-blue-400">Block Builders</h1>
+    </header>
+
+    <!-- Game Content -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="game-container w-full max-w-4xl p-6 rounded-lg text-center flex flex-col md:flex-row gap-8">
+            <!-- Game Canvas -->
+            <div class="flex-grow">
+                 <p class="text-gray-400 mb-4">A creative sandbox for building amazing worlds.</p>
+                <canvas id="gameCanvas" width="512" height="512"></canvas>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex flex-col items-center justify-center space-y-4 p-4 bg-gray-900 rounded-lg border-2 border-gray-700">
+                <h3 class="text-xl font-bold">Colors</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="color-box selected" style="background-color: #ef4444;" data-color="#ef4444"></div>
+                    <div class="color-box" style="background-color: #3b82f6;" data-color="#3b82f6"></div>
+                    <div class="color-box" style="background-color: #22c55e;" data-color="#22c55e"></div>
+                    <div class="color-box" style="background-color: #eab308;" data-color="#eab308"></div>
+                    <div class="color-box" style="background-color: #a855f7;" data-color="#a855f7"></div>
+                    <div class="color-box" style="background-color: #ec4899;" data-color="#ec4899"></div>
+                </div>
+                 <div id="eraser" class="color-box flex items-center justify-center text-xs font-bold" data-color="#1a202c">ERASE</div>
+
+                <div class="w-full pt-4 mt-4 border-t border-gray-700">
+                     <h3 class="text-lg font-bold mb-2">Custom Color</h3>
+                     <div class="color-picker-wrapper">
+                        <input type="color" id="customColorPicker" value="#ffffff">
+                     </div>
+                </div>
+
+                <button id="resetBtn" class="btn-arcade w-full mt-4">Reset</button>
+                 <a href="./game_dashboard.html" class="btn-arcade w-full text-center">Back</a>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorBoxes = document.querySelectorAll('.color-box');
+        const customColorPicker = document.getElementById('customColorPicker');
+        const colorPickerWrapper = document.querySelector('.color-picker-wrapper');
+        const resetBtn = document.getElementById('resetBtn');
+
+        const gridSize = 32;
+        const numTiles = canvas.width / gridSize;
+        let selectedColor = '#ef4444'; // Default to red
+
+        function drawGrid() {
+            ctx.strokeStyle = '#4a5568'; // Grid line color
+            for (let i = 0; i < numTiles; i++) {
+                for (let j = 0; j < numTiles; j++) {
+                    ctx.strokeRect(i * gridSize, j * gridSize, gridSize, gridSize);
+                }
+            }
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = '#1a202c'; // Background color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+        }
+        
+        function deselectAll() {
+            colorBoxes.forEach(b => b.classList.remove('selected'));
+            colorPickerWrapper.classList.remove('selected');
+        }
+
+        colorBoxes.forEach(box => {
+            box.addEventListener('click', () => {
+                deselectAll();
+                box.classList.add('selected');
+                selectedColor = box.dataset.color;
+            });
+        });
+        
+        customColorPicker.addEventListener('input', (e) => {
+            deselectAll();
+            colorPickerWrapper.classList.add('selected');
+            selectedColor = e.target.value;
+        });
+        
+        customColorPicker.addEventListener('click', (e) => {
+            deselectAll();
+            colorPickerWrapper.classList.add('selected');
+            selectedColor = e.target.value;
+        });
+
+
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const tileX = Math.floor(x / gridSize);
+            const tileY = Math.floor(y / gridSize);
+
+            ctx.fillStyle = selectedColor;
+            ctx.fillRect(tileX * gridSize, tileY * gridSize, gridSize, gridSize);
+            ctx.strokeStyle = '#4a5568';
+            ctx.strokeRect(tileX * gridSize, tileY * gridSize, gridSize, gridSize); // Redraw grid line
+        });
+
+        resetBtn.addEventListener('click', clearCanvas);
+
+        // Initial setup
+        window.onload = () => {
+            clearCanvas();
+        };
+    </script>
+</body>
+</html>
+
